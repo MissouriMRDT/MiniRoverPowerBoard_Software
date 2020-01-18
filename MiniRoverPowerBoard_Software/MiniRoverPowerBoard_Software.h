@@ -66,28 +66,32 @@
 
 // Function Declarations //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void getMainCurrent(int16_t &main_current);
+void getMainCurrent(uint16_t &main_current);
 
+void reactOverCurrent();
 
-void reactOverCurrent()
+void getLogVoltage(uint16_t &log_voltage);
 
+void reactUnderVoltage();
+
+void reactLowVoltage(uint16_t log_voltage);
+
+void getActVoltage(uint16_t &act_voltage);
+
+void reactForgottenLogicSwitch();
+
+void reactEstopReleased();
 
 void notifyEstop(); //Buzzer sound: beeeeeeeeeeeeeeeeeeeep beeeeeeeeeep beeeeep beeep bep
 
-
 void notifyLogicSwitch(); //Buzzer sound: beeep beeep
-
 
 void notifyEstopReleased(); //Buzzer sound: beep
 
-
-void notifyReboot(); //Buzzer sound: beeeeeeeeeep beeep beeep
-
+//void notifyReboot(); //Buzzer sound: beeeeeeeeeep beeep beeep
 
 void notifyOverCurrent(); //Buzzer Sound: beeeeeeeeeeeeeeeeeeeeeeeeeeeeeep
 
-
 void notifyUnderVoltage(); //Buzzer Sound: beeep beeep beeep beeep beeeeeeeeeeeeeeeeeeeep
-
 
 void notifyLowVoltage(); //Buzzer Sound: beeep beeep beeep
