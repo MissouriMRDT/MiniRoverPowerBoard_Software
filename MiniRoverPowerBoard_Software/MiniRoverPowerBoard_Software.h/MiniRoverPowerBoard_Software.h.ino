@@ -1,31 +1,37 @@
 #include "DualVNH5019MotorShield.h"
-
+#include <CuteBuzzerSounds.h>
 
 DualVNH5019MotorShield md;
 
 
 unsigned long int a, b, c;
 int x[15], ch1[15], ch[7], i;
+
+int buzz;    //this could be a bool but whatever
+#define BUZZER_PIN 5
 int mot1;
 int mot2;
 int motorball1;
 int motorball2;
 int mot1save;
 int mot2save;
-int posdead = 30;
-int negdead = -30;
+int posdead = 50;
+int negdead = -50;
 
 void setup() {
+
+  cute.init(BUZZER_PIN);
 
   Serial.begin(115200);
   Serial.println("Dual VNH5019 Motor Shield");
   md.init();
 
+  pinMode(5, OUTPUT);
 
   pinMode(3, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(3), read_me, FALLING);
 
-  delay(1000);
+  delay(2000);
 
 }
 
@@ -34,6 +40,7 @@ void loop() {
   // read reciever
   read_rc();
 
+
   Serial.print(ch[1]); Serial.print("\t");
   Serial.print(ch[2]); Serial.print("\t");
   Serial.print(ch[3]); Serial.print("\t");
@@ -41,52 +48,65 @@ void loop() {
   Serial.print(ch[5]); Serial.print("\t");
   Serial.print(ch[6]); Serial.print("\n");
 
+  buzz = map(ch[1], 88, 900, -2, 2 );
 
-  mot1 = map(ch[2], 72, 892, -800, 800);
-  mot2 = map(ch[4], 88, 920, -800, 800);
+
+  mot1 = map(ch[2], 88, 900, -1200, 1200);
+  mot2 = map(ch[4], 92, 920, -1200, 1200);
   Serial.print(mot1);
   Serial.print("mot1  ");
+  Serial.print("    ");
   Serial.print(mot2);
-  Serial.println("mot2  ");
-
-  //DELAY
-  delay(0);
+  Serial.print("mot2  ");
 
 
 
   // motor 2
-  if (mot2 < posdead && mot2 > -20) {
+  if (mot2 < posdead && mot2 > negdead) {
     md.setM2Speed(0);
   }
   if ( mot2 > posdead) {
 
     md.setM2Speed(mot2);
-    Serial.print("M1 current: ");
-    Serial.println(md.getM1CurrentMilliamps());
+    Serial.print("M2 current: ");
+    Serial.print(md.getM2CurrentMilliamps());
+    Serial.print("    ");
   }
   if ( mot2 < negdead) {
 
     md.setM2Speed(mot2);
-    Serial.print("M1 current: ");
-    Serial.println(md.getM1CurrentMilliamps());
+    Serial.print("M2 current: ");
+    Serial.print(md.getM2CurrentMilliamps());
+    Serial.print("    ");
   }
 
 
   // motor 1
-  if (mot1 < posdead && mot1 > -20) {
+  if (mot1 < posdead && mot1 > negdead) {
     md.setM1Speed(0);
   }
   if ( mot1 > posdead) {
 
     md.setM1Speed(mot1);
     Serial.print("M1 current: ");
-    Serial.println(md.getM1CurrentMilliamps());
+    Serial.print(md.getM1CurrentMilliamps());
+    Serial.print("    ");
   }
   if ( mot1 < negdead) {
 
     md.setM1Speed(mot1);
     Serial.print("M1 current: ");
-    Serial.println(md.getM1CurrentMilliamps());
+    Serial.print(md.getM1CurrentMilliamps());
+    Serial.print("    ");
+  }
+
+
+ 
+  if (buzz == 2) {
+    cute.play(S_JUMP);
+  }
+  if (buzz == -2) {
+    cute.play(S_BUTTON_PUSHED);
   }
 
 
